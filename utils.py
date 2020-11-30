@@ -11,7 +11,7 @@ from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.preprocessing import StandardScaler
 
 
-def get_similarity_from_rdms(x,dist,feature_norm,debiased=True,centered=True):
+def get_similarity_from_rdms(x,y, dist,feature_norm,debiased=True,centered=True):
     """
     Parameters
     ----------

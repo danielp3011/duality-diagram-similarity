@@ -87,7 +87,7 @@ def get_features(taskonomy_feats_path,pascal_feats_path,features_filename):
 
 def main():
     parser = argparse.ArgumentParser(description='Computing Duality Diagram Similarity between Taskonomy Tasks')
-    parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "pascal_5000", type=str)
+    parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "../../../data2/yd/pascal_5000", type=str)
     parser.add_argument('-fd','--feature_dir', help='path to saved features root directory', default = "./features/", type=str)
     parser.add_argument('-fdt','--feature_dir_taskonomy', help='path to saved features from taskonomy models', default = "./features/taskonomy_activations/", type=str)
     parser.add_argument('-fdp','--feature_dir_pascal', help='path to saved features from pascal models', default = "./features/pascal_activations/", type=str)
