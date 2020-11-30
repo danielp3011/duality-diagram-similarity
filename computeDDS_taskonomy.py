@@ -105,7 +105,7 @@ def main():
         affinity_ablation[dist]={}
         for feature_norm in (feature_norm_type):
             #affinity_matrix = np.zeros((len(task_list), len(task_list)), dtype = np.str)
-            rdm_matrix = np.zeros(len(task_list), 1, dtype = np.str)
+            rdm_matrix = np.zeros(len(task_list), dtype=object)
 
             method = dist + "__" + feature_norm
             start = time.time()
@@ -119,8 +119,8 @@ def main():
                 #                                                               dist,feature_norm)
                 #print("1000: ", taskonomy_data[task1], dist)
                 #affinity_matrix[index1, index1] = 
-                
-                rdm_matrix[index1, 1] = rdm(taskonomy_data[task1],dist)
+                print(type(rdm(taskonomy_data[task1],dist)))
+                rdm_matrix[index1] = rdm(taskonomy_data[task1],dist)
             print("RDM: ", rdm_matrix)
                  
 
@@ -128,7 +128,6 @@ def main():
             end = time.time()
             print("Method is ", method)
             print("Time taken is ", end - start)
-            affinity_ablation[dist][feature_norm]=affinity_matrix
     np.save(save_path,affinity_ablation)
 
 if __name__ == "__main__":
