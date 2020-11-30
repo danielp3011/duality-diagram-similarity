@@ -99,7 +99,7 @@ def main():
 
     # setting up DDS using Q,D,f,g for distance functions
     save_path = os.path.join(save_dir,'rdms.npy')
-    # dist_type = ['cosine']  #['pearson', 'euclidean', 'cosine']
+    dist_type = ['cosine']  #['pearson', 'euclidean', 'cosine']
     affinity_ablation = {}
     for dist in (dist_type):
         affinity_ablation[dist]={}
