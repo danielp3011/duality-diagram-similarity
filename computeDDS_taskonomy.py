@@ -51,8 +51,8 @@ def get_features(features_filename,num_images):
 
 def main():
     parser = argparse.ArgumentParser(description='Computing Duality Diagram Similarity between Taskonomy Tasks')
-    parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "../../../data2/yd/taskonomy_5000", type=str)
-    parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "./features/", type=str)
+    parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "taskonomy_5000", type=str)
+    parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "../../../data2/yd", type=str)
     parser.add_argument('-sd','--save_dir', help='path to save the DDS results', default = "./results/DDScomparison_taskonomy", type=str)
     parser.add_argument('-n','--num_images', help='number of images to compute DDS', default = 200, type=int)
     args = vars(parser.parse_args())
@@ -101,12 +101,15 @@ def main():
     save_path = os.path.join(save_dir,'rdms.npy')
     dist_type = ['cosine']  #['pearson', 'euclidean', 'cosine']
     affinity_ablation = {}
-    """for dist in (dist_type):
+    for dist in (dist_type):
         affinity_ablation[dist]={}
         for feature_norm in (feature_norm_type):
-            affinity_matrix = np.zeros((len(task_list), len(task_list)), dtype = np.str)
+            #affinity_matrix = np.zeros((len(task_list), len(task_list)), dtype = np.str)
+            rdm_matrix = np.zeros((len(task_list), 1, dtype = np.str)
+
             method = dist + "__" + feature_norm
             start = time.time()
+
             for index1,task1 in tqdm(enumerate(task_list)):
                 # for index2,task2 in enumerate(task_list):
                 #     if index1 > index2:
@@ -115,9 +118,13 @@ def main():
                 #                                                               taskonomy_data[task2],\
                 #                                                               dist,feature_norm)
                 #print("1000: ", taskonomy_data[task1], dist)
-                #affinity_matrix[index1, index1] = """
-    print(rdm(taskonomy_data["autoencoder"],"cosine")) 
-    
+                #affinity_matrix[index1, index1] = 
+                
+                rdm_matrix[index1, 1] = rdm(taskonomy_data[task1],dist)
+            print("RDM: ", rdm_matrix)
+                 
+
+
             end = time.time()
             print("Method is ", method)
             print("Time taken is ", end - start)
