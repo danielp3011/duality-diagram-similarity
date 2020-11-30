@@ -105,7 +105,7 @@ def main():
         affinity_ablation[dist]={}
         for feature_norm in (feature_norm_type):
             #affinity_matrix = np.zeros((len(task_list), len(task_list)), dtype = np.str)
-            rdm_matrix = np.zeros((len(task_list), 1, dtype = np.str)
+            rdm_matrix = np.zeros(len(task_list), 1, dtype = np.str)
 
             method = dist + "__" + feature_norm
             start = time.time()
