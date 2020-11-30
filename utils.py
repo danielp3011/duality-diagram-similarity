@@ -11,7 +11,7 @@ from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.preprocessing import StandardScaler
 
 
-def get_similarity_from_rdms(x,y,dist,feature_norm,debiased=True,centered=True):
+def get_similarity_from_rdms(x,dist,feature_norm,debiased=True,centered=True):
     """
     Parameters
     ----------
@@ -36,37 +36,37 @@ def get_similarity_from_rdms(x,y,dist,feature_norm,debiased=True,centered=True):
     """
     if feature_norm == 'None':
         x = x
-        y = y
+        # y = y
     elif feature_norm == 'centering':
         x = (x - np.mean(x,axis = 0, keepdims=True))
-        y = (y - np.mean(y,axis = 0, keepdims=True))
+        # y = (y - np.mean(y,axis = 0, keepdims=True))
     elif feature_norm == 'znorm':
         x = StandardScaler().fit_transform(x)
-        y = StandardScaler().fit_transform(y)
+        # y = StandardScaler().fit_transform(y)
     elif feature_norm == 'group_norm':
         x = np.reshape(x,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
-        y = np.reshape(y,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
+        # y = np.reshape(y,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
         x = group_norm(x,group_size=2)
-        y = group_norm(y,group_size=2)
+        # y = group_norm(y,group_size=2)
     elif feature_norm == 'instance_norm':
         x = np.reshape(x,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
-        y = np.reshape(y,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
+        # y = np.reshape(y,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
         x = group_norm(x,group_size=8)
-        y = group_norm(y,group_size=8)
+        # y = group_norm(y,group_size=8)
     elif feature_norm == 'layer_norm':
         x = np.reshape(x,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
-        y = np.reshape(y,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
+        # y = np.reshape(y,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
         x = group_norm(x,group_size=1)
-        y = group_norm(y,group_size=1)
+        # y = group_norm(y,group_size=1)
     elif feature_norm == 'batch_norm':
         x = np.reshape(x,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
-        y = np.reshape(y,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
+        # y = np.reshape(y,(-1,16,16,8))      # reshaping features back to n x h x w x c format from flattened features
         x = batch_norm(x)
-        y = batch_norm(y)
+        # y = batch_norm(y)
     
     return cka(rdm(x,dist),rdm(y,dist),debiased=debiased,centered=centered)
 
-def get_similarity(x,y,kernel,feature_norm,debiased=True,centered=True):
+def get_similarity(x,kernel,feature_norm,debiased=True,centered=True):
     """
     Parameters
     ----------

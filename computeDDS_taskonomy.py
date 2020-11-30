@@ -71,35 +71,35 @@ def main():
 
     # setting up DDS using Q,D,f,g for kernels
     kernel_type = ['rbf','lap','linear'] # possible kernels (f in DDS)
-    feature_norm_type = ['None','centering','znorm','group_norm','instance_norm','layer_norm','batch_norm'] # possible normalizations (Q,D in DDS)
+    feature_norm_type = ['znorm'] # ['None','centering','znorm','group_norm','instance_norm','layer_norm','batch_norm'] # possible normalizations (Q,D in DDS)
 
 
-    save_path = os.path.join(save_dir,'kernels.npy')
-    affinity_ablation = {}
-    for kernel in (kernel_type):
-        affinity_ablation[kernel]={}
-        for feature_norm in feature_norm_type:
-            affinity_matrix = np.zeros((len(task_list), len(task_list)), float)
-            method = kernel + "__" + feature_norm
-            start = time.time()
-            for index1,task1 in tqdm(enumerate(task_list)):
-                for index2,task2 in (enumerate(task_list)):
-                    if index1 > index2:
-                        continue
-                    affinity_matrix[index1,index2] = get_similarity(taskonomy_data[task1],\
-                                                                    taskonomy_data[task2],\
-                                                                    kernel,feature_norm)
-                    affinity_matrix[index2,index1] = affinity_matrix[index1,index2]
-            end = time.time()
-            print("Method is ", method)
-            print("Time taken is ", end - start)
-            affinity_ablation[kernel][feature_norm] = affinity_matrix
+    # save_path = os.path.join(save_dir,'kernels.npy')
+    # affinity_ablation = {}
+    # for kernel in (kernel_type):
+    #     affinity_ablation[kernel]={}
+    #     for feature_norm in feature_norm_type:
+    #         affinity_matrix = np.zeros((len(task_list), len(task_list)), float)
+    #         method = kernel + "__" + feature_norm
+    #         start = time.time()
+    #         for index1,task1 in tqdm(enumerate(task_list)):
+    #             for index2,task2 in (enumerate(task_list)):
+    #                 if index1 > index2:
+    #                     continue
+    #                 affinity_matrix[index1,index2] = get_similarity(taskonomy_data[task1],\
+            #                                                         taskonomy_data[task2],\
+            #                                                         kernel,feature_norm)
+            #         affinity_matrix[index2,index1] = affinity_matrix[index1,index2]
+            # end = time.time()
+            # print("Method is ", method)
+            # print("Time taken is ", end - start)
+            # affinity_ablation[kernel][feature_norm] = affinity_matrix
 
         np.save(save_path,affinity_ablation)
 
     # setting up DDS using Q,D,f,g for distance functions
     save_path = os.path.join(save_dir,'rdms.npy')
-    dist_type = ['pearson', 'euclidean', 'cosine']
+    # dist_type = ['cosine']  #['pearson', 'euclidean', 'cosine']
     affinity_ablation = {}
     for dist in (dist_type):
         affinity_ablation[dist]={}
@@ -108,12 +108,12 @@ def main():
             method = dist + "__" + feature_norm
             start = time.time()
             for index1,task1 in tqdm(enumerate(task_list)):
-                for index2,task2 in enumerate(task_list):
-                    if index1 > index2:
-                        continue
-                    affinity_matrix[index1,index2] = get_similarity_from_rdms(taskonomy_data[task1],\
-                                                                              taskonomy_data[task2],\
-                                                                              dist,feature_norm)
+                # for index2,task2 in enumerate(task_list):
+                #     if index1 > index2:
+                #         continue
+                #     affinity_matrix[index1,index2] = get_similarity_from_rdms(taskonomy_data[task1],\
+                #                                                               taskonomy_data[task2],\
+                #                                                               dist,feature_norm)
                     affinity_matrix[index2,index1] = affinity_matrix[index1,index2]
             end = time.time()
             print("Method is ", method)
