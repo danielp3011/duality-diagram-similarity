@@ -101,7 +101,7 @@ def main():
        # np.save(save_path,affinity_ablation)
 
     # setting up DDS using Q,D,f,g for distance functions
-    save_path = os.path.join(save_dir,'rdms.npy')
+    save_path = os.path.join(save_dir)
     dist_type = ['cosine']  #['pearson', 'euclidean', 'cosine']
     affinity_ablation = {}
     for dist in (dist_type):
@@ -140,8 +140,8 @@ def main():
             print("Method is ", method)
             print("Time taken is ", end - start)
     np.save(save_path, affinity_ablation)
-    np.save("task_rdms_train", rdm_matrix_train)
-    np.save("task_rdms_test", rdm_matrix_test)
+    np.save("./results_yd/task_rdms_train", rdm_matrix_train)
+    np.save("./results_yd/task_rdms_test", rdm_matrix_test)
 
 if __name__ == "__main__":
     main()
