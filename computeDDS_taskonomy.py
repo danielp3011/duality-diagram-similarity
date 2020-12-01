@@ -121,14 +121,19 @@ def main():
                 #affinity_matrix[index1, index1] = 
                 print(type(rdm(taskonomy_data[task1],dist)))
                 rdm_matrix[index1] = rdm(taskonomy_data[task1],dist)
+
+            print("tasklist: ", task_list)
+            print("len, tasklist: ", len(task_list))
             print("RDM: ", rdm_matrix)
-                 
+            print("RDM_type: ", type(rdm_matrix))
+            print("shape: ", rdm_matrix.shape)
 
 
             end = time.time()
             print("Method is ", method)
             print("Time taken is ", end - start)
-    np.save(save_path,affinity_ablation)
+    np.save(save_path, affinity_ablation)
+    np.save("task_rdms", rdm_matrix)
 
 if __name__ == "__main__":
     main()
