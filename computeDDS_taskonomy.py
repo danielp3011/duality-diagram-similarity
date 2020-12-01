@@ -45,9 +45,11 @@ def get_features(features_filename,num_images):
         end = time.time()
         print("whole file loading time is ", end - start)
         taskonomy_data_full = taskonomy_data.item()
-        taskonomy_data_few_images = {}
+        taskonomy_data_few_images_train = {}
+        taskonomy_data_few_images_test = {}
         for index,task in enumerate(task_list):
-            taskonomy_data_few_images[task] = taskonomy_data_full[task][:num_images,:]
+            taskonomy_data_few_images_train[task] = taskonomy_data_full[task][:num_images,:]
+            taskonomy_data_few_images_test[task] = taskonomy_data_full[task][num_images:2*num_images,:]         
         return taskonomy_data_few_images
 
 def main():
