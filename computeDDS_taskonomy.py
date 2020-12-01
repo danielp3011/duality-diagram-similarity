@@ -119,8 +119,9 @@ def main():
                 #                                                               dist,feature_norm)
                 #print("1000: ", taskonomy_data[task1], dist)
                 #affinity_matrix[index1, index1] = 
-                print(type(rdm(taskonomy_data[task1],dist)))
-                rdm_matrix[index1] = rdm(taskonomy_data[task1],dist)
+                x = StandardScaler().fit_transform(taskonomy_data[task1])
+                #print(type(rdm(taskonomy_data[task1],dist)))
+                rdm_matrix[index1] = rdm(x,dist)
 
             print("tasklist: ", task_list)
             print("len, tasklist: ", len(task_list))
