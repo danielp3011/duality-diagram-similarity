@@ -69,7 +69,7 @@ def main():
 
     task_list = list_of_tasks.split(' ')
 
-    taskonomy_data = get_features(features_filename,num_images) # function that returns features from taskonomy models for first #num_images
+    taskonomy_data, taskonomy_data_test = get_features(features_filename,num_images) # function that returns features from taskonomy models for first #num_images
 
 
     # setting up DDS using Q,D,f,g for kernels
@@ -108,7 +108,8 @@ def main():
         affinity_ablation[dist]={}
         for feature_norm in (feature_norm_type):
             #affinity_matrix = np.zeros((len(task_list), len(task_list)), dtype = np.str)
-            rdm_matrix = np.zeros(len(task_list), dtype=object)
+            rdm_matrix_train = np.zeros(len(task_list), dtype=object)
+            rdm_matrix_test = np.zeros(len(task_list), dtype=object)
 
             method = dist + "__" + feature_norm
             start = time.time()
@@ -122,22 +123,25 @@ def main():
                 #                                                               dist,feature_norm)
                 #print("1000: ", taskonomy_data[task1], dist)
                 #affinity_matrix[index1, index1] = 
-                x = StandardScaler().fit_transform(taskonomy_data[task1])
+                x_train = StandardScaler().fit_transform(taskonomy_data[task1])
+                x_test = StandardScaler().fit_transform(taskonomy_data_test[task1])
                 #print(type(rdm(taskonomy_data[task1],dist)))
-                rdm_matrix[index1] = rdm(x,dist)
+                rdm_matrix_train[index1] = rdm(x_train,dist)
+                rdm_matrix_test[index1] = rdm(x_test,dist)
 
             print("tasklist: ", task_list)
             print("len, tasklist: ", len(task_list))
-            print("RDM: ", rdm_matrix)
-            print("RDM_type: ", type(rdm_matrix))
-            print("shape: ", rdm_matrix.shape)
+            print("RDM: ", rdm_matrix_train)
+            print("RDM_type: ", type(rdm_matrix_train))
+            print("shape: ", rdm_matrix_train.shape)
 
 
             end = time.time()
             print("Method is ", method)
             print("Time taken is ", end - start)
     np.save(save_path, affinity_ablation)
-    np.save("task_rdms", rdm_matrix)
+    np.save("task_rdms_train", rdm_matrix_train)
+    np.save("task_rdms_test", rdm_matrix_test)
 
 if __name__ == "__main__":
     main()
