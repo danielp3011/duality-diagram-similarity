@@ -50,7 +50,7 @@ def get_features(features_filename,num_images):
         for index,task in enumerate(task_list):
             taskonomy_data_few_images_train[task] = taskonomy_data_full[task][:num_images,:]
             taskonomy_data_few_images_test[task] = taskonomy_data_full[task][num_images:2*num_images,:]         
-        return taskonomy_data_few_images
+        return taskonomy_data_few_images_train, taskonomy_data_few_images_test
 
 def main():
     parser = argparse.ArgumentParser(description='Computing Duality Diagram Similarity between Taskonomy Tasks')
