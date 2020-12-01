@@ -16,6 +16,7 @@ import glob
 from tqdm import tqdm
 import argparse
 import time
+from sklearn.preprocessing import StandardScaler
 
 from utils import  get_similarity_from_rdms,get_similarity, rdm 
 
