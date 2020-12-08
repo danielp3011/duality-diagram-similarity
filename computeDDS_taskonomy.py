@@ -47,7 +47,7 @@ def get_features(features_filename,num_images):
         taskonomy_data_full = taskonomy_data.item()
         taskonomy_data_few_images_train = {}
         taskonomy_data_few_images_test = {}
-        for index,task in enumerate(task_list):
+        for index,task in enumerate(task_list):  # to separately train and test rdm´s 
             taskonomy_data_few_images_train[task] = taskonomy_data_full[task][:num_images,:]
             taskonomy_data_few_images_test[task] = taskonomy_data_full[task][num_images:2*num_images,:]         
         return taskonomy_data_few_images_train, taskonomy_data_few_images_test
@@ -129,6 +129,10 @@ def main():
                 rdm_matrix_train[index1] = rdm(x_train,dist)
                 rdm_matrix_test[index1] = rdm(x_test,dist)
 
+                np.save("./results_yd/task_rdms_train_"+task1, rdm_matrix_train[index1])
+                np.save("./results_yd/task_rdms_test_"+task1, rdm_matrix_test[index1])
+
+
             print("tasklist: ", task_list)
             print("len, tasklist: ", len(task_list))
             print("RDM: ", rdm_matrix_train)
@@ -140,8 +144,8 @@ def main():
             print("Method is ", method)
             print("Time taken is ", end - start)
     np.save(save_path, affinity_ablation)
-    np.save("./results_yd/task_rdms_train", rdm_matrix_train)
-    np.save("./results_yd/task_rdms_test", rdm_matrix_test)
+    #np.save("./results_yd/task_rdms_train", rdm_matrix_train)
+    #np.save("./results_yd/task_rdms_test", rdm_matrix_test)
 
 if __name__ == "__main__":
     main()
