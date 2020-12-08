@@ -17,6 +17,7 @@ from tqdm import tqdm
 import argparse
 import time
 from sklearn.preprocessing import StandardScaler
+from scipy.io import savemat
 
 from utils import  get_similarity_from_rdms,get_similarity, rdm 
 
@@ -131,6 +132,10 @@ def main():
 
                 np.save("./results_yd/yd_train/"+task1+"_yd_results", rdm_matrix_train[index1])
                 np.save("./results_yd/yd_test/"+task1+"_yd_results", rdm_matrix_test[index1])
+
+                # create matlab format
+                # savemat(, mdic)
+
 
 
             print("tasklist: ", task_list)
