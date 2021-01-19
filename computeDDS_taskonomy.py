@@ -98,12 +98,12 @@ def create_rdm_train_test(task_list, taskonomy_data_train, taskonomy_data_test, 
                     rdm_matrix_test[index1] = rdm(x_test,dist)
 
                     # create directory for rdm
-                    Path("./results_yd/yd_train/train_"+num+"/").mkdir(parents=True, exist_ok=True) 
-                    Path("./results_yd/yd_test/test_"+num+"/").mkdir(parents=True, exist_ok=True) 
+                    Path("./results_yd/yd_train/"+num+"/").mkdir(parents=True, exist_ok=True) 
+                    Path("./results_yd/yd_test/"+num+"/").mkdir(parents=True, exist_ok=True) 
 
                     # save rdm to path defined above 
-                    np.save("./results_yd/yd_train/train_"+num+"/"+task1+"_yd_results", rdm_matrix_train[index1])
-                    np.save("./results_yd/yd_test/test_"+num+"/"+task1+"_yd_results", rdm_matrix_test[index1])
+                    np.save("./results_yd/yd_train/"+num+"/"+task1+"_yd_results", rdm_matrix_train[index1])
+                    np.save("./results_yd/yd_test/"+num+"/"+task1+"_yd_results", rdm_matrix_test[index1])
 
             end = time.time()
             print("Method is ", method)
