@@ -134,3 +134,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# don´t push created rdm file to repository 
+/results_yd 
+
+# ignore gitignore 
+.gitignore

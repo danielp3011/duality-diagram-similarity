@@ -124,7 +124,7 @@ def main():
     feature_norm_type = ['Znorm']  #['None','centering','znorm','group_norm','instance_norm','layer_norm','batch_norm'] # possible normalizations (Q,D in DDS)
     dist_type = ['cosine']  #, 'pearson', 'euclidean']
     task_list = list_of_tasks.split(' ') 
-    number_img = [10, 25, 50, 100, 200, 400, 800, 1000, 1500, 2000, 2500] # amount used for train and test 
+    number_img = [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400] # amount used for train and test 
 
     taskonomy_data_trains, taskonomy_data_tests = take_taskonomy_data(task_list=task_list, dataset=dataset, num_images=number_img, feature_dir=args['feature_dir'], save_dir=args['save_dir'])  # take out amount of img of taskonomy 5000 dataset
     
