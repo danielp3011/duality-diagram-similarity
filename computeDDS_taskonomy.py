@@ -21,7 +21,7 @@ from sklearn.preprocessing import StandardScaler
 from scipy.io import savemat
 from pathlib import Path 
 
-from utils import  get_similarity_from_rdms,get_similarity, rdm 
+from utils import  get_similarity_from_rdms, get_similarity, rdm 
 
 list_of_tasks = 'autoencoder curvature denoise edge2d edge3d \
 keypoint2d keypoint3d colorization \
@@ -47,9 +47,12 @@ def get_features(features_filename,num_images):
 
     """
     task_list = list_of_tasks.split(' ')
+    print("hi")
+    print(features_filename)
     if os.path.isfile(features_filename):
         start = time.time()
         taskonomy_data = np.load(features_filename,allow_pickle=True)
+        print("12342", taskonomy_data)
         end = time.time()
         print("whole file loading time is ", end - start)
         taskonomy_data_full = taskonomy_data.item()
@@ -114,7 +117,7 @@ def create_rdm_train_test(task_list, taskonomy_data_train, taskonomy_data_test, 
 def main():
     parser = argparse.ArgumentParser(description='Computing Duality Diagram Similarity between Taskonomy Tasks')
     parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "taskonomy_5000", type=str)
-    parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "../../../data2/yd", type=str)
+    parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "features", type=str)
     parser.add_argument('-sd','--save_dir', help='path to save the DDS results', default = "./results/DDScomparison_taskonomy", type=str)
     parser.add_argument('-n','--num_images', help='number of images to compute DDS', default = 200, type=int)
     args = vars(parser.parse_args())
@@ -126,6 +129,7 @@ def main():
     task_list = list_of_tasks.split(' ') 
     number_img = [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400] # amount used for train and test 
 
+    print(args['feature_dir'])
     taskonomy_data_trains, taskonomy_data_tests = take_taskonomy_data(task_list=task_list, dataset=dataset, num_images=number_img, feature_dir=args['feature_dir'], save_dir=args['save_dir'])  # take out amount of img of taskonomy 5000 dataset
     
     # Create train and test RDM´s with different number of images 
