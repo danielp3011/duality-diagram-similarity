@@ -11,11 +11,6 @@ sys.argv = ['']
 %reload_ext autoreload
 %autoreload 2
 
-list_of_tasks = 'autoencoder curvature denoise edge2d edge3d \
-keypoint2d keypoint3d colorization \
-reshade rgb2depth rgb2mist rgb2sfnorm \
-room_layout segment25d segment2d vanishing_point \
-segmentsemantic class_1000 class_places inpainting_whole'
 import numpy as np
 import os
 import glob
@@ -28,6 +23,11 @@ from pathlib import Path
 
 from utils import  get_similarity_from_rdms,get_similarity, rdm 
 
+list_of_tasks = 'autoencoder curvature denoise edge2d edge3d \
+keypoint2d keypoint3d colorization \
+reshade rgb2depth rgb2mist rgb2sfnorm \
+room_layout segment25d segment2d vanishing_point \
+segmentsemantic class_1000 class_places inpainting_whole'
 
 
 def get_features(features_filename,num_images):
