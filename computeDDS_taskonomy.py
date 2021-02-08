@@ -8,8 +8,8 @@ import sys
 sys.argv = ['']
 
 # use if you use python interactive
-%reload_ext autoreload
-%autoreload 2
+# %reload_ext autoreload
+# %autoreload 2
 
 list_of_tasks = 'autoencoder curvature denoise edge2d edge3d \
 keypoint2d keypoint3d colorization \
@@ -57,7 +57,7 @@ def get_features(features_filename,num_images):
         taskonomy_data_few_images_test = {}
         for index,task in enumerate(task_list):  # to separately train and test rdm´s 
             taskonomy_data_few_images_train[task] = taskonomy_data_full[task][:num_images,:]
-            taskonomy_data_few_images_test[task] = taskonomy_data_full[task][num_images:2*num_images,:]         
+            taskonomy_data_few_images_test[task] = taskonomy_data_full[task][4500:,:]         
         return taskonomy_data_few_images_train, taskonomy_data_few_images_test
 
 def take_taskonomy_data(task_list, dataset, num_images, feature_dir, save_dir): 
@@ -124,7 +124,8 @@ def main():
     feature_norm_type = ['Znorm']  #['None','centering','znorm','group_norm','instance_norm','layer_norm','batch_norm'] # possible normalizations (Q,D in DDS)
     dist_type = ['cosine']  #, 'pearson', 'euclidean']
     task_list = list_of_tasks.split(' ') 
-    number_img = [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400] # amount used for train and test 
+    #number_img = [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400] # amount used for train and test 
+    number_img = [500, 1500, 2500, 3000, 3500, 4000, 4500] # amount used for train and test 
 
     taskonomy_data_trains, taskonomy_data_tests = take_taskonomy_data(task_list=task_list, dataset=dataset, num_images=number_img, feature_dir=args['feature_dir'], save_dir=args['save_dir'])  # take out amount of img of taskonomy 5000 dataset
     
