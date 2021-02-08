@@ -4,6 +4,12 @@ Created on Tue Aug 11 15:17:00 2020
 
 @author: kshitij
 """
+import sys
+sys.argv = ['']
+
+# use if you use python interactive
+%reload_ext autoreload
+%autoreload 2
 
 import numpy as np
 import os
