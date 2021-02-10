@@ -10,16 +10,15 @@ def compare_rdms(rdm_a, rdm_b):
     for num_a, value_a in tqdm(rdm_a.items()):
         for num_b, value_b in rdm_b.items(): 
             if num_a == num_b:
-                equal[num_b] = [value_a[i] == value_b[i] for i in range(len(value_a))]
+                equal[num_b] = np.all(np.array([np.all(value_a[i] == value_b[i]) for i in range(len(value_a))]))
                 
     return equal
-
 
 def main(): 
 
     # get directory of each rdm 
     yd_path_a = "yd_results/"
-    yd_path_b = "../../../data2/yd/results_yd/" 
+    yd_path_b = "../duality-diagram-similarity_yd/results_yd/" 
     dir_trains_a = [join(yd_path_a+"yd_train/", dir) for dir in listdir(yd_path_a+"yd_train") if isdir(join(yd_path_a+"yd_train/", dir))] 
     dir_tests_a = [join(yd_path_a+"yd_test/", dir) for dir in listdir(yd_path_a+"yd_test") if isdir(join(yd_path_a+"yd_test/", dir))] 
     dir_trains_b = [join(yd_path_b+"yd_train/", dir) for dir in listdir(yd_path_b+"yd_train") if isdir(join(yd_path_b+"yd_train/", dir))] 
@@ -33,7 +32,7 @@ def main():
 
     # get npy files from each rdm for each rdm size
     train_tasks_a = {}
-    for i, num in tqdm(enumerate(num_trains_a)):
+    for i, num in tqdm(enumerate(num_trains_a)):  
         train_tasks_a[num] = [np.load(join(dir_trains_a[i],f)) for f in sorted(listdir(dir_trains_a[i]))]
 
     test_tasks_a = {}
@@ -52,6 +51,8 @@ def main():
     wrong_train_rdms = compare_rdms(train_tasks_a, train_tasks_b) 
     wrong_test_rdms = compare_rdms(test_tasks_a, test_tasks_b) 
 
+    print("Train_RDMS: ", wrong_train_rdms)
+    print("Test_RDMS: ", wrong_test_rdms)  # 500 on test a was used on other images than on test b, therefore false 
 
 if __name__ == "__main__":
     main() 
