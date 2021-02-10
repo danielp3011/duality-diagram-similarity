@@ -23,14 +23,7 @@ from pathlib import Path
 
 from utils import  get_similarity_from_rdms, get_similarity, rdm 
 
-list_of_tasks = 'autoencoder curvature denoise edge2d edge3d \
-keypoint2d keypoint3d colorization \
-reshade rgb2depth rgb2mist rgb2sfnorm \
-room_layout segment25d segment2d vanishing_point \
-segmentsemantic class_1000 class_places inpainting_whole'
-
-
-def get_features(features_filename,num_images):
+def get_features(features_filename):
     """
 
     Parameters
@@ -46,67 +39,71 @@ def get_features(features_filename,num_images):
         dictionary containg features of taskonomy models.
 
     """
-    task_list = list_of_tasks.split(' ')
-    print("hi")
-    print(features_filename)
     if os.path.isfile(features_filename):
         start = time.time()
         taskonomy_data = np.load(features_filename,allow_pickle=True)
-        print("12342", taskonomy_data)
-        end = time.time()
+        end = time.time() 
         print("whole file loading time is ", end - start)
-        taskonomy_data_full = taskonomy_data.item()
-        taskonomy_data_few_images_train = {}
-        taskonomy_data_few_images_test = {}
-        for index,task in enumerate(task_list):  # to separately train and test rdm´s 
-            taskonomy_data_few_images_train[task] = taskonomy_data_full[task][:num_images,:]
-            taskonomy_data_few_images_test[task] = taskonomy_data_full[task][4500:,:]         
-        return taskonomy_data_few_images_train, taskonomy_data_few_images_test
-
-def take_taskonomy_data(task_list, dataset, num_images, feature_dir, save_dir): 
+        taskonomy_data_full = taskonomy_data.item() 
     
-    features_filename = os.path.join(feature_dir, "taskonomy_pascal_feats_" + dataset + ".npy")
-    save_dir = os.path.join(save_dir,dataset)
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir) 
+    return taskonomy_data_full 
+
+
+
+def split_dataset_train_test(task_list, num_images, data=None, test_area=(4500,)):
+    """[summary]
+
+    Args:
+        num_images ([type]): [description]
+        dataset ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        [type]: [description]
+    """
+    train_images = {}
+    test_images = {}
+    beginning = test_area[0]
+    for task in tqdm(task_list):  # to separately train and test rdm´s 
+        train_images[task] = data[task][:num_images,:]
+        test_images[task] = data[task][beginning:,:]
+
+    return train_images, test_images
+
+def create_rdm(num_images, task_list, rdm_data, kernel_type, feature_norm_type, dist_type, save_dir, save_rdms): 
+    """[summary]
+
+    Args:
+        task_list ([type]): [description]
+        taskonomy_data_train ([type]): [description]
+        taskonomy_data_test ([type]): [description]
+        kernel_type ([type]): [description]
+        feature_norm_type ([type]): [description]
+        dist_type ([type]): [description]
+        save_dir ([type]): [description]
+    """
     
-    # store taskonomy rdm´s with number of img as key for nested dict 
-    num_img_per_train = {}  
-    num_img_per_test = {} 
-    for number in num_images: 
-        taskonomy_data_train, taskonomy_data_test = get_features(features_filename,number) # function that returns features from taskonomy models for first #num_images
-        num_img_per_train[str(number)] = taskonomy_data_train 
-        num_img_per_test[str(number)] = taskonomy_data_test 
-
-    return num_img_per_train, num_img_per_test
-
-def create_rdm_train_test(task_list, taskonomy_data_train, taskonomy_data_test, kernel_type, feature_norm_type, dist_type, save_dir): 
     save_path = os.path.join(save_dir)
 
     affinity_ablation = {}
     for dist in (dist_type):
         affinity_ablation[dist]={}
         for feature_norm in (feature_norm_type):
-            rdm_matrix_train = np.zeros(len(task_list), dtype=object)
-            rdm_matrix_test = np.zeros(len(task_list), dtype=object)
+            rdm_matrix = np.zeros(len(task_list), dtype=object)
 
             method = dist + "__" + feature_norm
             start = time.time()
 
-            for num in taskonomy_data_train: # because first key is number of images, that are used for train/test
-                for index1,task1 in tqdm(enumerate(task_list)): 
-                    x_train = StandardScaler().fit_transform(taskonomy_data_train[num][task1])
-                    x_test = StandardScaler().fit_transform(taskonomy_data_test[num][task1])
-                    rdm_matrix_train[index1] = rdm(x_train,dist)
-                    rdm_matrix_test[index1] = rdm(x_test,dist)
+            for num in num_images: # because first key is number of images, that are used for train/test
+                for index1,task1 in tqdm(enumerate(task_list)):  
+                    x = StandardScaler().fit_transform(rdm_data[str(num)][task1])
+                    rdm_matrix[index1] = rdm(x,dist)
+           
+                    print(save_rdms+str(num)+"/")
+                    # create directory for rdm if needed
+                    Path(save_rdms+str(num)+"/").mkdir(parents=True, exist_ok=True) 
 
-                    # create directory for rdm
-                    Path("./results_yd/yd_train/"+num+"/").mkdir(parents=True, exist_ok=True) 
-                    Path("./results_yd/yd_test/"+num+"/").mkdir(parents=True, exist_ok=True) 
-
-                    # save rdm to path defined above 
-                    np.save("./results_yd/yd_train/"+num+"/"+task1+"_yd_results", rdm_matrix_train[index1])
-                    np.save("./results_yd/yd_test/"+num+"/"+task1+"_yd_results", rdm_matrix_test[index1])
+                    # save rdm to path defined  
+                    np.save(save_rdms+str(num)+"/"+task1+"_yd_results", rdm_matrix[index1])
 
             end = time.time()
             print("Method is ", method)
@@ -117,26 +114,57 @@ def create_rdm_train_test(task_list, taskonomy_data_train, taskonomy_data_test, 
 def main():
     parser = argparse.ArgumentParser(description='Computing Duality Diagram Similarity between Taskonomy Tasks')
     parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "taskonomy_5000", type=str)
-    parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "features", type=str)
+    parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "../../../data2/yd", type=str)
     parser.add_argument('-sd','--save_dir', help='path to save the DDS results', default = "./results/DDScomparison_taskonomy", type=str)
     parser.add_argument('-n','--num_images', help='number of images to compute DDS', default = 200, type=int)
     args = vars(parser.parse_args())
 
+    # create rdms according to these tasks
+    list_of_tasks = 'autoencoder curvature denoise edge2d edge3d \
+    keypoint2d keypoint3d colorization \
+    reshade rgb2depth rgb2mist rgb2sfnorm \
+    room_layout segment25d segment2d vanishing_point \
+    segmentsemantic class_1000 class_places inpainting_whole' 
+
+    # choose parameters for further calculations 
     dataset = args["dataset"] 
     kernel_type = ['rbf','lap','linear'] # possible kernels (f in DDS)
     feature_norm_type = ['Znorm']  #['None','centering','znorm','group_norm','instance_norm','layer_norm','batch_norm'] # possible normalizations (Q,D in DDS)
-    dist_type = ['cosine']  #, 'pearson', 'euclidean']
-    task_list = list_of_tasks.split(' ') 
-    #number_img = [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400] # amount used for train and test 
-    number_img = [500, 1500, 2500, 3000, 3500, 4000, 4500] # amount used for train and test 
+    dist_type = ['cosine']  #, 'pearson', 'euclidean'] 
+    feature_dir = args['feature_dir']
+    save_dir = args['save_dir']
+    task_list = list_of_tasks.split(' ')
+    task_list = list(filter(None, task_list))
 
-    print(args['feature_dir'])
-    taskonomy_data_trains, taskonomy_data_tests = take_taskonomy_data(task_list=task_list, dataset=dataset, num_images=number_img, feature_dir=args['feature_dir'], save_dir=args['save_dir'])  # take out amount of img of taskonomy 5000 dataset
+    # load and save directory 
+    features_filename = os.path.join(feature_dir, "taskonomy_pascal_feats_" + dataset + ".npy")
+    save_dir = os.path.join(save_dir, dataset)
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir) 
+
+    # get taskonomy data 
+    taskonomy_data = get_features(features_filename)
     
-    # Create train and test RDM´s with different number of images 
-    create_rdm_train_test(task_list = task_list, taskonomy_data_train = taskonomy_data_trains, taskonomy_data_test = taskonomy_data_tests, kernel_type=kernel_type, feature_norm_type=feature_norm_type, dist_type=dist_type, save_dir=args['save_dir'])
+    # store taskonomy rdm´s with different image-numbers  
+    train_num = [500, 1500, 2500, 3000, 3500, 4000, 4500] # amount used for train and test 
+    test_num = [500]
+    rdm_train_per_img_size = {}  # nested dict, with number of img as key for one rdm 
+    rdm_test_per_img_size = {} 
+    train_save_path = "./yd_results/yd_train/"  # save train-rdms in this path
+    test_save_path = "./yd_results/yd_test/" # save test-rdms in this path
+
+    for test_img in tqdm(test_num):
+        _, taskonomy_data_test = split_dataset_train_test(task_list, test_img, data=taskonomy_data, test_area=(4500,)) # function that returns features from taskonomy models for first #num_images
+        rdm_test_per_img_size[str(test_img)] = taskonomy_data_test
+
+    for train_img in tqdm(train_num): 
+        taskonomy_data_train, _ = split_dataset_train_test(task_list, train_img, data=taskonomy_data) # function that returns features from taskonomy models for first #num_images
+        rdm_train_per_img_size[str(train_img)] = taskonomy_data_train 
+    
+    # create and save train and test RDM´s with different number of images 
+    create_rdm(train_num, task_list, rdm_train_per_img_size, kernel_type, feature_norm_type, dist_type, save_dir, save_rdms=train_save_path)
+    create_rdm(test_num, task_list, rdm_test_per_img_size, kernel_type, feature_norm_type, dist_type, save_dir, save_rdms=test_save_path)
+
 
 if __name__ == "__main__":
     main()
-
-

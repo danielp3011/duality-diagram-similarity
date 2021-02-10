@@ -136,10 +136,10 @@ dmypy.json
 .pyre/
 
 # don´t push created rdm file to repository 
-/results_yd 
+/yd_results 
 
 /features
 
 # ignore gitignore 
 .gitignore
-
+.vscode
