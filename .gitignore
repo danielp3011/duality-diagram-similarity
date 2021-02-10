@@ -138,5 +138,8 @@ dmypy.json
 # Ignore settings.json 
 .vscode/settings.json 
 
+# ignore created rdms 
+results_yd
+
 # Ignore gitignore 
 .gitignore

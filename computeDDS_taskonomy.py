@@ -18,6 +18,7 @@ import argparse
 import time
 from sklearn.preprocessing import StandardScaler
 from scipy.io import savemat
+from pathlib import Path 
 
 from utils import  get_similarity_from_rdms,get_similarity, rdm 
 
@@ -58,7 +59,7 @@ def main():
     parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "taskonomy_5000", type=str)
     parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "../../../data2/yd", type=str)
     parser.add_argument('-sd','--save_dir', help='path to save the DDS results', default = "./results/DDScomparison_taskonomy", type=str)
-    parser.add_argument('-n','--num_images', help='number of images to compute DDS', default = 200, type=int)
+    parser.add_argument('-n','--num_images', help='number of images to compute DDS', default = 4500, type=int)
     args = vars(parser.parse_args())
 
     num_images = args['num_images']
@@ -130,8 +131,12 @@ def main():
                 rdm_matrix_train[index1] = rdm(x_train,dist)
                 rdm_matrix_test[index1] = rdm(x_test,dist)
 
-                np.save("./results_yd/yd_train/"+task1+"_yd_results", rdm_matrix_train[index1])
-                np.save("./results_yd/yd_test/"+task1+"_yd_results", rdm_matrix_test[index1])
+
+                Path("./results_yd/yd_train/"+str(num_images)+"/").mkdir(parents=True, exist_ok=True) 
+                Path("./results_yd/yd_test/"+str(num_images)+"/").mkdir(parents=True, exist_ok=True) 
+
+                np.save("./results_yd/yd_train/"+str(num_images)+"/"+task1+"_yd_results", rdm_matrix_train[index1])
+                np.save("./results_yd/yd_test/"+str(num_images)+"/"+task1+"_yd_results", rdm_matrix_test[index1])
 
                 # create matlab format
                 # savemat(, mdic)
