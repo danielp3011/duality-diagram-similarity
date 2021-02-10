@@ -131,7 +131,6 @@ def main():
                 rdm_matrix_train[index1] = rdm(x_train,dist)
                 rdm_matrix_test[index1] = rdm(x_test,dist)
 
-
                 Path("./results_yd/yd_train/"+str(num_images)+"/").mkdir(parents=True, exist_ok=True) 
                 Path("./results_yd/yd_test/"+str(num_images)+"/").mkdir(parents=True, exist_ok=True) 
 
@@ -139,9 +138,8 @@ def main():
                 np.save("./results_yd/yd_test/"+str(num_images)+"/"+task1+"_yd_results", rdm_matrix_test[index1])
 
                 # create matlab format
-                # savemat(, mdic)
-
-
+                # savemat("./results_yd/yd_train/"+task1+"_yd_results", rdm_matrix_train[index1])
+                # savemat("./results_yd/yd_test/"+task1+"_yd_results", rdm_matrix_test[index1])
 
             print("tasklist: ", task_list)
             print("len, tasklist: ", len(task_list))
