@@ -98,7 +98,6 @@ def create_rdm(num_images, task_list, rdm_data, kernel_type, feature_norm_type, 
                     x = StandardScaler().fit_transform(rdm_data[str(num)][task1])
                     rdm_matrix[index1] = rdm(x,dist)
            
-                    print(save_rdms+str(num)+"/")
                     # create directory for rdm if needed
                     Path(save_rdms+str(num)+"/").mkdir(parents=True, exist_ok=True) 
 
