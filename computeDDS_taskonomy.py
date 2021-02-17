@@ -83,7 +83,7 @@ def create_rdm(num_images, task_list, rdm_data, kernel_type, feature_norm_type, 
         save_dir ([type]): [description]
     """
     
-    save_path = os.path.join(save_dir)
+    #save_path = os.path.join(save_dir)
 
     #affinity_ablation = {}
     for dist in (dist_type):
@@ -146,9 +146,9 @@ def main():
     taskonomy_data = get_features(features_filename)
     
     # store taskonomy rdm´s with different image-numbers  
-    train_num = [50] #[200, 400, 500, 600, 800, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2200, 2400, 2500, 
-               #3000, 3500, 4000, 4500] # amount used for train and test 
-    test_num = [50] #[500, 200, 400, 500, 600, 800, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2200, 2400, 2500]
+    train_num = [50, 200, 400, 500, 600, 800, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2200, 2400, 2500, 
+                3000, 3500, 4000, 4500] # amount used for train and test 
+    test_num = [50, 500, 200, 400, 500, 600, 800, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2200, 2400, 2500]
     rdm_train_per_img_size = {}  # nested dict, with number of img as key for one rdm 
     rdm_test_per_img_size = {} 
 
