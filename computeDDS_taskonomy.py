@@ -85,9 +85,9 @@ def create_rdm(num_images, task_list, rdm_data, kernel_type, feature_norm_type, 
     
     save_path = os.path.join(save_dir)
 
-    affinity_ablation = {}
+    #affinity_ablation = {}
     for dist in (dist_type):
-        affinity_ablation[dist]={}
+        #affinity_ablation[dist]={}
         for feature_norm in (feature_norm_type):
             rdm_matrix = np.zeros(len(task_list), dtype=object)
 
@@ -108,12 +108,12 @@ def create_rdm(num_images, task_list, rdm_data, kernel_type, feature_norm_type, 
             end = time.time()
             print("Method is ", method)
             print("Time taken is ", end - start)
-    np.save(save_path, affinity_ablation)
+    #np.save(save_path, affinity_ablation)
 
 
 def main():
     parser = argparse.ArgumentParser(description='Computing Duality Diagram Similarity between Taskonomy Tasks')
-    parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "taskonomy_5000", type=str)
+    parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "pascal_5000", type=str)
     parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "../../../data2/yd", type=str)
     parser.add_argument('-sd','--save_dir', help='path to save the DDS results', default = "./results/DDScomparison_taskonomy", type=str)
     parser.add_argument('-n','--num_images', help='number of images to compute DDS', default = 200, type=int)
@@ -151,8 +151,10 @@ def main():
     test_num = [50] #[500, 200, 400, 500, 600, 800, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2200, 2400, 2500]
     rdm_train_per_img_size = {}  # nested dict, with number of img as key for one rdm 
     rdm_test_per_img_size = {} 
-    train_save_path = "./yd_results/yd_train/"  # save train-rdms in this path
-    test_save_path = "./yd_results/yd_test/" # save test-rdms in this path
+
+    data = "Pascal_5000/"
+    train_save_path = "./yd_results/" + data + "yd_train/"  # save train-rdms in this path
+    test_save_path = "./yd_results/" + data + "yd_test/" # save test-rdms in this path
 
     for test_img in tqdm(test_num):
         _, taskonomy_data_test = split_dataset_train_test(task_list, data=taskonomy_data, test_area=(test_img,2*test_img)) # function that returns features from taskonomy models for first #num_images

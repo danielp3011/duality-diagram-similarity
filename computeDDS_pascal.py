@@ -8,8 +8,8 @@ import sys
 sys.argv = ['']
 
 # use if you use python interactive
-%reload_ext autoreload
-%autoreload 2
+# %reload_ext autoreload
+# %autoreload 2
 
 import numpy as np
 import os
@@ -94,7 +94,8 @@ def get_features(taskonomy_feats_path,pascal_feats_path,features_filename):
 def main():
     parser = argparse.ArgumentParser(description='Computing Duality Diagram Similarity between Taskonomy Tasks')
     parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "pascal_5000", type=str)
-    parser.add_argument('-fd','--feature_dir', help='path to saved features root directory', default = "./features/", type=str)
+    #parser.add_argument('-fd','--feature_dir', help='path to saved features root directory', default = "./features/", type=str)
+    parser.add_argument('-fd','--feature_dir', help='path to saved features root directory', default = "../../../data2/yd", type=str)
     parser.add_argument('-fdt','--feature_dir_taskonomy', help='path to saved features from taskonomy models', default = "./features/taskonomy_activations/", type=str)
     parser.add_argument('-fdp','--feature_dir_pascal', help='path to saved features from pascal models', default = "./features/pascal_activations/", type=str)
     parser.add_argument('-sd','--save_dir', help='path to save the DDS results', default = "./results/DDScomparison_pascal", type=str)
@@ -104,10 +105,11 @@ def main():
 
     num_images = args['num_images']
     dataset = args['dataset']
+    feature_dir = args["feature_dir"]  # implemented from yd 
     taskonomy_feats_path = os.path.join(args['feature_dir_taskonomy'],dataset)
     pascal_feats_path = os.path.join(args['feature_dir_pascal'],dataset)
     num_repetitions = args['num_iters']
-    features_filename = os.path.join("./features","taskonomy_pascal_feats_" + args['dataset'] + ".npy")
+    features_filename = os.path.join(feature_dir,"taskonomy_pascal_feats_" + args['dataset'] + ".npy")
     num_total_images = 5000
     if dataset == 'nyuv2':
         num_total_images = 1449
