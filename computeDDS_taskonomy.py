@@ -145,23 +145,31 @@ def main():
     # get taskonomy data 
     taskonomy_data = get_features(features_filename)
     
+    #######################################
+    train_num = [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400] # any, up to 5000
+    test_num = [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400] # any, up to 5000
+    testset_fixed = False  # True/False 
+    folder_saving = "variable_set/"
+    data = "pascal_5000"  # "taskonomy_5000"/"pascal_5000" 
+    #######################################
+ 
+    train_save_path = "./yd_results/" + data + "/" + folder_saving + "yd_train/"  # save train-rdms in this path
+    test_save_path = "./yd_results/" + data + "/" + folder_saving + "yd_test/" # save test-rdms in this path
+    
     # store taskonomy rdm´s with different image-numbers  
-    train_num = [50, 200, 400, 500, 600, 800, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2200, 2400, 2500, 
-                3000, 3500, 4000, 4500] # amount used for train and test 
-    test_num = [50, 500, 200, 400, 500, 600, 800, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2200, 2400, 2500]
     rdm_train_per_img_size = {}  # nested dict, with number of img as key for one rdm 
     rdm_test_per_img_size = {} 
 
-    data = "Pascal_5000/"
-    train_save_path = "./yd_results/" + data + "yd_train/"  # save train-rdms in this path
-    test_save_path = "./yd_results/" + data + "yd_test/" # save test-rdms in this path
-
     for test_img in tqdm(test_num):
-        _, taskonomy_data_test = split_dataset_train_test(task_list, data=taskonomy_data, test_area=(test_img,2*test_img)) # function that returns features from taskonomy models for first #num_images
-        rdm_test_per_img_size[str(test_img)] = taskonomy_data_test
+        if testset_fixed: 
+            _, taskonomy_data_test = split_dataset_train_test(task_list, data=taskonomy_data, test_area=(4500,5000)) # function that returns features from taskonomy models from e.g. index 4500 to 5000
+            rdm_test_per_img_size[str(test_img)] = taskonomy_data_test
+        else:
+            _, taskonomy_data_test = split_dataset_train_test(task_list, data=taskonomy_data, test_area=(test_img,2*test_img)) # function that returns features from taskonomy models from index test_img to 2*test_img
+            rdm_test_per_img_size[str(test_img)] = taskonomy_data_test
 
     for train_img in tqdm(train_num): 
-        taskonomy_data_train, _ = split_dataset_train_test(task_list, data=taskonomy_data, train_area=(0,train_img)) # function that returns features from taskonomy models for first #num_images
+        taskonomy_data_train, _ = split_dataset_train_test(task_list, data=taskonomy_data, train_area=(0,train_img)) # function that returns features from taskonomy models fromm 0 to train_img
         rdm_train_per_img_size[str(train_img)] = taskonomy_data_train 
     
     # create and save train and test RDM´s with different number of images 
