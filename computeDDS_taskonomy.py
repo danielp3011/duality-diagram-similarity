@@ -149,7 +149,7 @@ def main():
     train_num = [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400] # any, up to 5000
     test_num = [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400] # any, up to 5000
     testset_fixed = False  # True/False 
-    folder_saving = "variable_set/"
+    folder_saving = "variable_set/"  #"variable_set"/"testset_fixed"
     data = "pascal_5000"  # "taskonomy_5000"/"pascal_5000" 
     #######################################
  
