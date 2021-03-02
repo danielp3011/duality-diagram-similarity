@@ -119,12 +119,6 @@ def main():
     parser.add_argument('-n','--num_images', help='number of images to compute DDS', default = 200, type=int)
     args = vars(parser.parse_args())
 
-    # create rdms according to these tasks
-    list_of_tasks = 'autoencoder curvature denoise edge2d edge3d \
-    keypoint2d keypoint3d colorization \
-    reshade rgb2depth rgb2mist rgb2sfnorm \
-    room_layout segment25d segment2d vanishing_point \
-    segmentsemantic class_1000 class_places inpainting_whole' 
 
     # choose parameters for further calculations 
     dataset = args["dataset"] 
@@ -133,8 +127,6 @@ def main():
     dist_type = ['cosine']  #, 'pearson', 'euclidean'] 
     feature_dir = args['feature_dir']
     save_dir = args['save_dir']
-    task_list = list_of_tasks.split(' ')
-    task_list = list(filter(None, task_list))
 
     # load and save directory 
     features_filename = os.path.join(feature_dir, "taskonomy_pascal_feats_" + dataset + ".npy")
@@ -143,15 +135,22 @@ def main():
         os.makedirs(save_dir) 
 
     # get taskonomy data 
-    taskonomy_data = get_features(features_filename)
+    taskonomy_data = get_features(features_filename) 
     
     #######################################
-    train_num = [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400] # any, up to 5000
-    test_num = [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400] # any, up to 5000
+    train_num = [50, 200, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500] # any, up to 5000
+    test_num = [500] # any, up to 5000  
+    
+    # create rdms according to these tasks
+    list_of_tasks = 'pascal_voc_segmentation' 
+
     testset_fixed = False  # True/False 
-    folder_saving = "variable_set/"
+    folder_saving = "testset_fixed/"  # testset_fixed/variable_set
     data = "pascal_5000"  # "taskonomy_5000"/"pascal_5000" 
     #######################################
+
+    task_list = list_of_tasks.split(' ')
+    task_list = list(filter(None, task_list))
  
     train_save_path = "./yd_results/" + data + "/" + folder_saving + "yd_train/"  # save train-rdms in this path
     test_save_path = "./yd_results/" + data + "/" + folder_saving + "yd_test/" # save test-rdms in this path
