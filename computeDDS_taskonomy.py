@@ -138,13 +138,17 @@ def main():
     taskonomy_data = get_features(features_filename) 
     
     #######################################
-    train_num = [50, 200, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500] # any, up to 5000
+    train_num = [50, 200, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]  # any, up to 5000
     test_num = [500] # any, up to 5000  
     
     # create rdms according to these tasks
-    list_of_tasks = 'pascal_voc_segmentation' 
+    list_of_tasks = 'autoencoder curvature denoise edge2d edge3d \
+                    keypoint2d keypoint3d colorization \
+                    reshade rgb2depth rgb2mist rgb2sfnorm \
+                    room_layout segment25d segment2d vanishing_point \
+                    segmentsemantic class_1000 class_places inpainting_whole pascal_voc_segmentation' 
 
-    testset_fixed = False  # True/False 
+    testset_fixed = True  # True/False 
     folder_saving = "testset_fixed/"  # testset_fixed/variable_set
     data = "pascal_5000"  # "taskonomy_5000"/"pascal_5000" 
     #######################################
