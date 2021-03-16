@@ -146,18 +146,18 @@ def main():
                     keypoint2d keypoint3d colorization \
                     reshade rgb2depth rgb2mist rgb2sfnorm \
                     room_layout segment25d segment2d vanishing_point \
-                    segmentsemantic class_1000 class_places inpainting_whole pascal_voc_segmentation' 
+                    segmentsemantic class_1000 class_places inpainting_whole pascal_voc_segmentation'  
 
     testset_fixed = True  # True/False 
     folder_saving = "testset_fixed/"  # testset_fixed/variable_set
-    data = "pascal_5000"  # "taskonomy_5000"/"pascal_5000" 
+    data = "taskonomy_5000"  # "taskonomy_5000"/"pascal_5000"/"nyuv2" 
     #######################################
 
     task_list = list_of_tasks.split(' ')
     task_list = list(filter(None, task_list))
  
     train_save_path = "./yd_results/" + data + "/" + folder_saving + "yd_train/"  # save train-rdms in this path
-    test_save_path = "./yd_results/" + data + "/" + folder_saving + "yd_test/" # save test-rdms in this path
+    test_save_path = "./yd_results/" + data + "/" + folder_saving + "yd_test/" # save test-rdms in this path 
     
     # store taskonomy rdm´s with different image-numbers  
     rdm_train_per_img_size = {}  # nested dict, with number of img as key for one rdm 
