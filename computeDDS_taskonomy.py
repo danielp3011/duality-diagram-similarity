@@ -112,34 +112,11 @@ def create_rdm(num_images, task_list, rdm_data, kernel_type, feature_norm_type, 
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Computing Duality Diagram Similarity between Taskonomy Tasks')
-    parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "pascal_5000", type=str)
-    parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "../../../data2/yd", type=str)
-    parser.add_argument('-sd','--save_dir', help='path to save the DDS results', default = "./results/DDScomparison_taskonomy", type=str)
-    parser.add_argument('-n','--num_images', help='number of images to compute DDS', default = 200, type=int)
-    args = vars(parser.parse_args())
 
-
-    # choose parameters for further calculations 
-    dataset = args["dataset"] 
-    kernel_type = ['rbf','lap','linear'] # possible kernels (f in DDS)
-    feature_norm_type = ['Znorm']  #['None','centering','znorm','group_norm','instance_norm','layer_norm','batch_norm'] # possible normalizations (Q,D in DDS)
-    dist_type = ['cosine']  #, 'pearson', 'euclidean'] 
-    feature_dir = args['feature_dir']
-    save_dir = args['save_dir']
-
-    # load and save directory 
-    features_filename = os.path.join(feature_dir, "taskonomy_pascal_feats_" + dataset + ".npy")
-    save_dir = os.path.join(save_dir, dataset)
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir) 
-
-    # get taskonomy data 
-    taskonomy_data = get_features(features_filename) 
-    
     #######################################
-    train_num = [50, 200, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]  # any, up to 5000
-    test_num = [500] # any, up to 5000  
+    train_num = [50, 200, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]  # [50, 200, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]/[50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400]
+
+    test_num = [500] # [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400]  
     
     # create rdms according to these tasks
     list_of_tasks = 'autoencoder curvature denoise edge2d edge3d \
@@ -150,14 +127,44 @@ def main():
 
     testset_fixed = True  # True/False 
     folder_saving = "testset_fixed/"  # testset_fixed/variable_set
-    data = "taskonomy_5000"  # "taskonomy_5000"/"pascal_5000"/"nyuv2" 
+    dataset = "taskonomy_5000_pasc"  # "taskonomy_5000"/"pascal_5000"/"nyuv2"/"taskonomy_5000_pasc" 
     #######################################
 
-    task_list = list_of_tasks.split(' ')
+    parser = argparse.ArgumentParser(description='Computing Duality Diagram Similarity between Taskonomy Tasks')
+    parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "pascal_5000", type=str)
+    parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "../../../data2/yd", type=str)
+    parser.add_argument('-sd','--save_dir', help='path to save the DDS results', default = "./results/DDScomparison_taskonomy", type=str)
+    parser.add_argument('-n','--num_images', help='number of images to compute DDS', default = 200, type=int)
+    args = vars(parser.parse_args())
+
+
+    # choose parameters for further calculations 
+    #dataset = args["dataset"] 
+    kernel_type = ['rbf','lap','linear'] # possible kernels (f in DDS)
+    feature_norm_type = ['Znorm']  #['None','centering','znorm','group_norm','instance_norm','layer_norm','batch_norm'] # possible normalizations (Q,D in DDS)
+    dist_type = ['cosine']  #, 'pearson', 'euclidean'] 
+    feature_dir = args['feature_dir']
+    save_dir = args['save_dir']
+
+    # load and save directory 
+    if dataset == "taskonomy_5000_pasc":
+        a, b, _ = dataset.split("_") 
+        features_filename = os.path.join(feature_dir, "taskonomy_pascal_feats_" + a + "_" + b + ".npy")
+    else: 
+        features_filename = os.path.join(feature_dir, "taskonomy_pascal_feats_" + dataset + ".npy")
+
+    save_dir = os.path.join(save_dir, dataset)
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir) 
+
+    # get taskonomy data 
+    taskonomy_data = get_features(features_filename) 
+
+    task_list = list_of_tasks.split(' ') 
     task_list = list(filter(None, task_list))
  
-    train_save_path = "./yd_results/" + data + "/" + folder_saving + "yd_train/"  # save train-rdms in this path
-    test_save_path = "./yd_results/" + data + "/" + folder_saving + "yd_test/" # save test-rdms in this path 
+    train_save_path = "./yd_results/" + dataset + "/" + folder_saving + "yd_train/"  # save train-rdms in this path
+    test_save_path = "./yd_results/" + dataset + "/" + folder_saving + "yd_test/" # save test-rdms in this path 
     
     # store taskonomy rdm´s with different image-numbers  
     rdm_train_per_img_size = {}  # nested dict, with number of img as key for one rdm 
