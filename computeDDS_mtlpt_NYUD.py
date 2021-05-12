@@ -45,12 +45,12 @@ def get_features(features_filename):
         end = time.time() 
         print("whole file loading time is ", end - start)
         taskonomy_data_full = taskonomy_data.item() 
-        # print("TASKONOMY DATA: ", taskonomy_data_full)
+        # print("TASKONOMY DATA: ", taskonomy_data_full.keys())
         # print("Type TASKONOMY: ", type(taskonomy_data_full))
         # print("TASKONOMY AUTOENCODER: ", taskonomy_data_full["vanishing_point"])
         # print("TASKONOMY AUTOENCODER LENGTH: ", len(taskonomy_data_full["vanishing_point"]))
         # print("TASKONOMY AUTOENCODER DTYPE: ", taskonomy_data_full["vanishing_point"].dtype)
-        print("Vanishing Point: ", taskonomy_data_full["vanishing_point"][1].shape)
+        # print("Vanishing Point: ", taskonomy_data_full["vanishing_point"][1].shape)
         # print("53 TASKONOMY AUTOENCODER TYPE: ", type(taskonomy_data_full["vanishing_point"]))
 
     
@@ -140,8 +140,8 @@ def main():
 
     parser = argparse.ArgumentParser(description='Computing Duality Diagram Similarity between Taskonomy Tasks')
     parser.add_argument('-d','--dataset', help='image dataset to use for computing DDS: options are [pascal_5000, taskonomy_5000, nyuv2]', default = "pascal_5000", type=str)
-    parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "../../../data2/yd", type=str)
-    parser.add_argument('-sd','--save_dir', help='path to save the DDS results', default = "./results/DDScomparison_taskonomy", type=str)
+    parser.add_argument('-fd','--feature_dir', help='path to saved features from taskonomy models', default = "/home/data2/yd/results_yd/mtlpt/NYUD/hrnet_w18/feature_maps/Dsn_Dde=Dss", type=str)
+    parser.add_argument('-sd','--save_dir', help='path to save the DDS results', default = "/home/data2/yd/results_yd/mtlpt/NYUD/hrnet_w18/feature_maps/Dsn_Dde=Dss/rdms", type=str)
     parser.add_argument('-n','--num_images', help='number of images to compute DDS', default = 200, type=int)
     args = vars(parser.parse_args())
 
@@ -149,25 +149,29 @@ def main():
     # choose parameters for further calculations 
     #dataset = args["dataset"] 
     kernel_type = ['rbf','lap','linear'] # possible kernels (f in DDS)
-    feature_norm_type = ['Znorm']  #['None','centering','znorm','group_norm','instance_norm','layer_norm','batch_norm'] # possible normalizations (Q,D in DDS)
+    feature_norm_type = ['znorm']  #['None','centering','znorm','group_norm','instance_norm','layer_norm','batch_norm'] # possible normalizations (Q,D in DDS)
     dist_type = ['cosine']  #, 'pearson', 'euclidean'] 
     feature_dir = args['feature_dir']
     save_dir = args['save_dir']
 
     # load and save directory 
-    if dataset == "taskonomy_5000_pasc":
-        a, b, _ = dataset.split("_") 
-        features_filename = os.path.join(feature_dir, "taskonomy_pascal_feats_" + a + "_" + b + ".npy")
-    else: 
-        features_filename = os.path.join(feature_dir, "taskonomy_pascal_feats_" + dataset + ".npy")
+    # if dataset == "taskonomy_5000_pasc":
+    #     a, b, _ = dataset.split("_") 
+    #     features_filename = os.path.join(feature_dir, "taskonomy_pascal_feats_" + a + "_" + b + ".npy")
+    # else: 
+    #     features_filename = os.path.join(feature_dir, "taskonomy_pascal_feats_" + dataset + ".npy")
 
-    save_dir = os.path.join(save_dir, dataset)
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir) 
+    features_filename = os.path.join(feature_dir, "all_task_dictionary" + ".npy")
+    print("1",features_filename)
+    print("2", save_dir)
+
+    # save_dir = os.path.join(save_dir, dataset)
+    # if not os.path.exists(save_dir):
+    #     os.makedirs(save_dir) 
 
     # get taskonomy data 
     taskonomy_data = get_features(features_filename) 
-    #print("taskonomy data: ", taskonomy_data.dtype) 
+    # print("taskonomy data: ", taskonomy_data.dtype) 
     #print("taskonomy data shapes", [taskonomy_data[t].shape for t in taskonomy_data])
     # task_list = list_of_tasks.split(' ') 
     # task_list = list(filter(None, task_list))
