@@ -46,8 +46,12 @@ def get_features(features_filename,num_images):
         taskonomy_data_few_images_train = {}
         taskonomy_data_few_images_test = {}
         for index,task in enumerate(task_list):  # to separately train and test rdm´s 
+            # print("task", task)
+            # print(taskonomy_data_full[task][:num_images,:])
             taskonomy_data_few_images_train[task] = taskonomy_data_full[task][:num_images,:]
-            taskonomy_data_few_images_test[task] = taskonomy_data_full[task][num_images:2*num_images,:]         
+            taskonomy_data_few_images_test[task] = taskonomy_data_full[task][num_images:2*num_images,:]      
+
+        print()   
         return taskonomy_data_few_images_train, taskonomy_data_few_images_test
 
 def main():
@@ -60,9 +64,10 @@ def main():
 
     num_images = args['num_images']
     dataset = args['dataset']
-    features_filename = os.path.join(args['feature_dir'],"taskonomy_pascal_feats_" + args['dataset'] + ".npy") 
+    args['feature_dir'] = args['feature_dir'] + "/" +dataset[-5:]
+    features_filename = os.path.join(args['feature_dir'], args['dataset'] + ".npy")  # deleted => "taskonomy_pascal_feats_" +
     print("1: ", features_filename) 
-    save_dir = os.path.join(args['save_dir'],dataset) 
+    save_dir = os.path.join(args['save_dir'], "rdms", dataset[-5:]) 
     print("2: ", save_dir)
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
@@ -73,7 +78,7 @@ def main():
 
 
     # setting up DDS using Q,D,f,g for kernels
-    kernel_type = ['rbf','lap','linear'] # possible kernels (f in DDS)
+    # kernel_type = ['rbf','lap','linear'] # possible kernels (f in DDS)
     feature_norm_type = ['znorm'] # ['None','centering','znorm','group_norm','instance_norm','layer_norm','batch_norm'] # possible normalizations (Q,D in DDS)
 
 
@@ -123,6 +128,10 @@ def main():
                 #                                                               dist,feature_norm)
                 #print("1000: ", taskonomy_data[task1], dist)
                 #affinity_matrix[index1, index1] = 
+                print("here:")
+                print(taskonomy_data[task1])
+                print(taskonomy_data[task1].shape)
+
                 x_train = StandardScaler().fit_transform(taskonomy_data[task1])
                 x_test = StandardScaler().fit_transform(taskonomy_data_test[task1])
                 rdm_matrix_train[index1] = rdm(x_train,dist)
@@ -131,8 +140,9 @@ def main():
                 #Path(save_dir).mkdir(parents=True, exist_ok=True) 
                 #Path("./results_yd/yd_test/"+str(num_images)+"/").mkdir(parents=True, exist_ok=True) 
 
-                np.save(save_dir + "/" + task1 + "_train.py", rdm_matrix_train[index1])
-                np.save(save_dir + "/" + task1 + "_test.py", rdm_matrix_test[index1])
+                # saving rdms:
+                np.save(save_dir + "/" + task1 + "_train", rdm_matrix_train[index1])
+                np.save(save_dir + "/" + task1 + "_test", rdm_matrix_test[index1])
 
             print("tasklist: ", task_list)
             print("len, tasklist: ", len(task_list))
@@ -144,7 +154,7 @@ def main():
             end = time.time()
             print("Method is ", method)
             print("Time taken is ", end - start)
-    np.save(save_path, affinity_ablation)
+    # np.save(save_path, affinity_ablation)
 
 
 if __name__ == "__main__":
