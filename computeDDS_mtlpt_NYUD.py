@@ -15,6 +15,7 @@ import time
 from sklearn.preprocessing import StandardScaler
 from scipy.io import savemat
 from pathlib import Path 
+import sys
 
 from utils import  get_similarity_from_rdms,get_similarity, rdm 
 
@@ -132,6 +133,7 @@ def main():
                 print("here:")
                 print(taskonomy_data[task1])
                 print(taskonomy_data[task1].shape)
+                sys.exit()
 
                 x_train = StandardScaler().fit_transform(taskonomy_data[task1])
                 x_test = StandardScaler().fit_transform(taskonomy_data_test[task1])
