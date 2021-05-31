@@ -1,3 +1,4 @@
+#!/bin/sh 
 python3 computeDDS_mtlpt.py -d all_source_tasks_24-32 -fd /home/data2/yd/results_yd/mtlpt/NYUD/hrnet_w18/mti_net/Dsn_Dde=Dss/ -sd /home/data2/yd/results_yd/mtlpt/NYUD/hrnet_w18/mti_net/Dsn_Dde=Dss --num_images 250 --num_imgs_features 654 -l final;
 python3 computeDDS_mtlpt.py -d all_source_tasks_24-32 -fd /home/data2/yd/results_yd/mtlpt/NYUD/hrnet_w18/mti_net/Dss_Dde=Dsn -sd /home/data2/yd/results_yd/mtlpt/NYUD/hrnet_w18/mti_net/Dss_Dde=Dsn --num_images 250 --num_imgs_features 654 -l final;
 python3 computeDDS_mtlpt.py -d all_source_tasks_24-32 -fd /home/data2/yd/results_yd/mtlpt/NYUD/hrnet_w18/mti_net/Dss_Dsn=Dde -sd /home/data2/yd/results_yd/mtlpt/NYUD/hrnet_w18/mti_net/Dss_Dsn=Dde --num_images 250 --num_imgs_features 654 -l final;

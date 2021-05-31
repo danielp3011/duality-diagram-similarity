@@ -112,7 +112,7 @@ def main():
     parser.add_argument('-sd','--save_dir', help='path to save the DDS results', type=str)
     parser.add_argument('-n','--num_images', help='number of images to compute DDS', default = 200, type=int)
     parser.add_argument('-nf', '--num_imgs_features' , help='number of images to add to the feature all_source dictionary', default=2000, type=int)
-    parser.add_argument('-l', '--layer', help='Layer where the features are coming from, select from ["final", "scales", "single_final"]', type=str)
+    parser.add_argument('-l', '--layer', help='Layer where the features are coming from, select from ["final", "scales"]', type=str)
     args = vars(parser.parse_args())
 
     check_sizes(args)  
@@ -123,8 +123,8 @@ def main():
     elif args['layer'] == "scales":
         # extracting the names of the folders for creating the layer_list: 
         layer_list = [f.path.rsplit("/",1)[1] for f in os.scandir(os.path.join(args['feature_dir'], "feature_maps", args['dataset'][-5:], args['layer'])) if f.is_dir()]
-    elif args['layer'] == "single_final": 
-        layer_list = [args['layer']] 
+    # elif args['layer'] == "single_final": //TODO: Remove if really not necessary 
+    #     layer_list = [args['layer']] 
 
     for layer in layer_list:
         print('\nProcessing layer ', layer, '.')
@@ -134,9 +134,9 @@ def main():
         elif args['layer'] == "scales":
             save_dir = os.path.join(args['save_dir'], "rdms", args['dataset'][-5:], args['layer'], layer, str(args['num_images'])) 
             feature_dir = os.path.join(args['feature_dir'], "feature_maps", args['dataset'][-5:], args['layer'], layer)
-        elif args['layer'] == "single_final": 
-            save_dir = os.path.join(args['save_dir'], "rdms", args['dataset'][-5:], args['layer'], str(args['num_images']))
-            feature_dir = 
+        # elif args['layer'] == "single_final": 
+        #     save_dir = os.path.join(args['save_dir'], "rdms", args['dataset'][-5:], args['layer'], str(args['num_images']))
+        #     feature_dir = 
 
         if not os.path.exists(save_dir):
             print("Creating save_dir")
