@@ -132,8 +132,8 @@ def main():
             save_dir = os.path.join(args['save_dir'], "rdms", args['dataset'][-5:], args['layer'], str(args['num_images'])) 
             feature_dir = os.path.join(args['feature_dir'], "feature_maps", args['dataset'][-5:], args['layer'])
         elif args['layer'] == "scales":
-            save_dir = os.path.join(args['save_dir'], "rdms", args['dataset'][-5:], args['layer'], layer, str(args['num_images'])) 
-            feature_dir = os.path.join(args['feature_dir'], "feature_maps", args['dataset'][-5:], args['layer'], layer)
+            save_dir = os.path.join(args['save_dir'], "rdms", args['dataset'][-5:], layer, str(args['num_images']))  # no args["layer"]
+            feature_dir = os.path.join(args['feature_dir'], "feature_maps", args['dataset'][-5:], layer)  # no args["layer"]
         # elif args['layer'] == "single_final": 
         #     save_dir = os.path.join(args['save_dir'], "rdms", args['dataset'][-5:], args['layer'], str(args['num_images']))
         #     feature_dir = 
